@@ -311,13 +311,13 @@ function BookingForm() {
                 <p id={id('exp-label')} className="title-4 text-white">
                   Training experience
                 </p>
-                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <div className="mt-2 grid grid-cols-3 gap-2">
                   {EXPERIENCE.map((x, i) => {
                     const checked = fields.experience === x
                     return (
                       <label
                         key={x}
-                        className={`caption-1 flex cursor-pointer items-center justify-center rounded-xl border px-3 py-3 text-center transition-colors duration-300 ease-forge has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-volt ${
+                        className={`caption-1 flex min-h-12 cursor-pointer items-center justify-center rounded-xl border px-2 py-2 text-center sm:min-h-0 sm:px-3 sm:py-3 transition-colors duration-300 ease-forge has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-volt ${
                           checked ? 'border-volt bg-volt/10 text-white' : 'border-white/10 bg-ink text-muted hover:border-white/20 hover:text-white'
                         }`}
                       >

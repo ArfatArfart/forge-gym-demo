@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { Pause, Play, Star } from '@phosphor-icons/react'
 import { Button } from './ui/Button'
-import { Wordmark } from './ui/Logo'
+import { HeroMedia, heroPoster } from './HeroMedia'
 import { EASE } from '../lib/motion'
 import { GYM, PROGRAMS, formatTime, nextClass, spotsLabel } from '../lib/data'
-import { posterSrc, prefersSaveData, useVideoCut, videoSrc } from '../lib/media'
+import { prefersSaveData, useVideoCut } from '../lib/media'
+import type { WordLayout } from '../lib/heroGL'
 
 const SLIDE_MS = 7000 // each clip is exactly 7 seconds
 const LINES = ['Get stronger', 'in 12 weeks,', 'fully coached.']
@@ -18,7 +19,7 @@ export function Hero() {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [visible, setVisible] = useState(true)
-  const videos = useRef<(HTMLVideoElement | null)[]>([])
+  const [word, setWord] = useState<WordLayout | null>(null)
   const bars = useRef<(HTMLSpanElement | null)[]>([])
   const elapsed = useRef(0)
   const swipe = useRef<{ x: number; y: number } | null>(null)
@@ -49,29 +50,6 @@ export function Hero() {
       document.removeEventListener('visibilitychange', onVis)
     }
   }, [])
-
-  // Restart the active clip on every switch and warm up the next one.
-  useEffect(() => {
-    videos.current.forEach((v, i) => {
-      if (!v) return
-      if (i === index) {
-        try {
-          v.currentTime = 0
-        } catch {
-          /* not loaded yet */
-        }
-      } else v.pause()
-    })
-    const next = videos.current[(index + 1) % PROGRAMS.length]
-    if (next && motionOk) next.preload = 'auto'
-  }, [index, cut, motionOk])
-
-  useEffect(() => {
-    const v = videos.current[index]
-    if (!v || !motionOk) return
-    if (running) v.play().catch(() => {})
-    else v.pause()
-  }, [running, index, cut, motionOk])
 
   // Story timer: drives the progress bar directly (no re-render per frame) and advances on completion.
   useEffect(() => {
@@ -122,40 +100,13 @@ export function Hero() {
       onPointerCancel={() => (swipe.current = null)}
       className="relative h-[100svh] min-h-[640px] touch-pan-y overflow-hidden bg-ink select-none"
     >
-      {/* Footage: all clips stacked, the active one fades and settles in */}
-      <motion.div style={{ scale: reduced ? 1 : mediaScale }} className="absolute inset-0" aria-hidden="true">
-        {PROGRAMS.map((p, i) => (
-          <video
-            key={`${p.id}-${cut}`}
-            ref={(el) => {
-              videos.current[i] = el
-            }}
-            src={motionOk ? videoSrc(p.video, cut) : undefined}
-            poster={posterSrc(p.video, cut)}
-            muted
-            playsInline
-            preload={i === 0 ? 'auto' : 'none'}
-            disablePictureInPicture
-            className={`absolute inset-0 size-full object-cover transition-[opacity,transform] duration-1000 ease-forge ${
-              i === index ? 'scale-100 opacity-100' : 'scale-110 opacity-0'
-            }`}
-          />
-        ))}
-        <span className="absolute inset-0 bg-ink/45" />
-      </motion.div>
+      {/* Footage with the 3D wordmark composited behind the athlete */}
+      <HeroMedia index={index} running={running} motionOk={motionOk} cut={cut} scale={reduced ? 1 : mediaScale} onWord={setWord} />
 
-      {/* Giant wordmark over the footage */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: EASE, delay: 0.15 }}
-        className="pointer-events-none absolute inset-x-4 top-28 text-white mix-blend-difference md:inset-x-8 md:top-24"
-        aria-hidden="true"
-      >
-        <Wordmark className="block h-auto w-full" />
-      </motion.div>
-
-      <NextClassChip className="absolute left-4 top-[calc(7.5rem+20vw)] inline-flex max-w-[calc(100%-2rem)] md:left-8 lg:hidden" />
+      <NextClassChip
+        className="absolute left-4 top-[calc(7.5rem+20vw)] inline-flex max-w-[calc(100%-2rem)] md:left-8 lg:hidden [@media(max-height:720px)]:hidden"
+        style={word ? { top: word.top + word.height + 16 } : undefined}
+      />
 
       {/* Copy and controls */}
       <motion.div
@@ -164,7 +115,7 @@ export function Hero() {
       >
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[680px]">
-            <NextClassChip className="mb-6 hidden lg:inline-flex" />
+            <NextClassChip className="mb-6 hidden max-w-full lg:inline-flex" />
             <div className="h-4 overflow-hidden">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.p
@@ -235,7 +186,7 @@ export function Hero() {
                     }`}
                   >
                     <img
-                      src={posterSrc(p.video, 'wide')}
+                      src={heroPoster(p.video, 'wide')}
                       alt=""
                       className="hidden h-10 w-16 shrink-0 rounded-lg object-cover lg:block"
                       loading="lazy"
@@ -276,20 +227,21 @@ export function Hero() {
   )
 }
 
-function NextClassChip({ className = '' }: { className?: string }) {
+function NextClassChip({ className = '', style }: { className?: string; style?: CSSProperties }) {
   const next = nextClass()
   if (!next) return null
   const when = next.when === 'Today' || next.when === 'Tomorrow' ? next.when.toLowerCase() : next.when
   return (
     <motion.a
       href="#schedule"
+      style={style}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: EASE, delay: 1.2 }}
-      className={`z-10 max-w-full items-center gap-2 rounded-full border border-white/15 bg-ink/40 py-2 pl-3 pr-4 backdrop-blur-md transition-colors duration-300 ease-forge hover:bg-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt ${className}`}
+      className={`z-10 min-h-10 items-center gap-2 rounded-full border border-white/15 bg-ink/40 py-2 pl-3 pr-4 backdrop-blur-md transition-colors duration-300 ease-forge hover:bg-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt ${className}`}
     >
       <span className="size-2 shrink-0 rounded-full bg-volt animate-pulse-dot" aria-hidden="true" />
-      <span className="caption-1 truncate text-white">
+      <span className="caption-1 min-w-0 truncate text-white">
         Next class · {next.cls.name} {when} {formatTime(next.cls.time)}
         <span className="text-white/60"> · {spotsLabel(next.cls.spots)}</span>
       </span>

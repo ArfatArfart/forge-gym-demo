@@ -283,7 +283,20 @@ export type Program = {
   times: string
 }
 
+// Ordered as a progression: where beginners start, then the core program, then the specialties.
 export const PROGRAMS: Program[] = [
+  {
+    id: 'foundations',
+    name: 'Foundations',
+    video: 'foundations',
+    promise: 'Never lifted before? Start here.',
+    body: 'Four weeks on the squat, hinge, press and pull with light loads and lots of coaching. You graduate into regular classes with confidence.',
+    duration: '60 min',
+    level: 'Beginner friendly',
+    coach: 'lena',
+    intensity: 2,
+    times: 'Monday and Wednesday at 6:45 pm, Saturday 8:00 am',
+  },
   {
     id: 'strength',
     name: 'Strength',
@@ -319,18 +332,6 @@ export const PROGRAMS: Program[] = [
     coach: 'dana',
     intensity: 4,
     times: 'Monday, Tuesday, Wednesday and Thursday evenings, Saturday 10:30 am',
-  },
-  {
-    id: 'foundations',
-    name: 'Foundations',
-    video: 'foundations',
-    promise: 'Never lifted before? Start here.',
-    body: 'Four weeks on the squat, hinge, press and pull with light loads and lots of coaching. You graduate into regular classes with confidence.',
-    duration: '60 min',
-    level: 'Beginner friendly',
-    coach: 'lena',
-    intensity: 2,
-    times: 'Monday and Wednesday at 6:45 pm, Saturday 8:00 am',
   },
 ]
 

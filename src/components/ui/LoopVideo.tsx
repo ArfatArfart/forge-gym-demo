@@ -1,33 +1,49 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { posterSrc, prefersSaveData, useVideoCut, videoSrc } from '../../lib/media'
 
-type Props = { name: string; className?: string; label?: string }
+type Props = {
+  name: string
+  className?: string
+  label?: string
+  /** Lets a parent keep only one of several on-screen loops playing (phones decode one at a time well). */
+  active?: boolean
+}
 
 /**
- * Muted background loop that only downloads and plays while it is on screen.
+ * Muted background loop that only downloads and plays while it is on screen and active.
  * Falls back to its poster for reduced motion and data saver.
  */
-export function LoopVideo({ name, className = '', label }: Props) {
+export function LoopVideo({ name, className = '', label, active = true }: Props) {
   const ref = useRef<HTMLVideoElement>(null)
+  const inView = useRef(false)
   const cut = useVideoCut()
   const reduced = useReducedMotion()
 
+  const sync = useCallback(() => {
+    const v = ref.current
+    if (!v) return
+    if (inView.current && active && !reduced && !prefersSaveData()) {
+      if (v.preload !== 'auto') v.preload = 'auto'
+      v.play().catch(() => {})
+    } else v.pause()
+  }, [active, reduced])
+
   useEffect(() => {
     const v = ref.current
-    if (!v || reduced || prefersSaveData()) return
+    if (!v) return
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
-          if (v.preload !== 'auto') v.preload = 'auto'
-          v.play().catch(() => {})
-        } else v.pause()
+        inView.current = e.isIntersecting
+        sync()
       },
       { rootMargin: '120px' },
     )
     io.observe(v)
     return () => io.disconnect()
-  }, [reduced, cut])
+  }, [sync, cut])
+
+  useEffect(sync, [sync])
 
   return (
     <video

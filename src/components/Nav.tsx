@@ -22,6 +22,7 @@ const focusRing =
 
 export function Nav() {
   const active = useActiveSection(IDS)
+  const solid = useSolidNav()
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function Nav() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
-          className="flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 bg-coal/70 p-2 backdrop-blur-xl md:w-auto md:max-w-none md:justify-start"
+          className={`flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 p-2 backdrop-blur-xl transition-colors duration-500 ease-forge md:w-auto md:max-w-none md:justify-start ${solid ? "bg-ink/90" : "bg-coal/70"}`}
         >
           <a href="#top" aria-label="Forge Athletic Club, back to top" className={`rounded-full px-3 py-2 ${focusRing}`}>
             <Logo />
@@ -172,4 +173,19 @@ export function Nav() {
       </AnimatePresence>
     </>
   )
+}
+
+/** True while a section marked data-nav-tone="solid" (the volt band) sits under the nav. */
+function useSolidNav() {
+  const [solid, setSolid] = useState(false)
+  useEffect(() => {
+    const els = document.querySelectorAll('[data-nav-tone="solid"]')
+    if (!els.length) return
+    const io = new IntersectionObserver((entries) => setSolid(entries.some((e) => e.isIntersecting)), {
+      rootMargin: '0px 0px -90% 0px',
+    })
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+  return solid
 }

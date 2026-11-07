@@ -6,7 +6,7 @@ A demo landing page for a fictional strength and conditioning gym. It is built p
 
 ## What's inside
 
-- **Story-style video hero:** full-screen footage cycles through four programs like Instagram stories. Tap or swipe to switch, and pause at any time. A giant FORGE wordmark sits on the footage, and a live "next class" chip shows the next open class and its spots.
+- **Story-style video hero with depth:** full-screen footage cycles through four programs like Instagram stories. Tap or swipe to switch, and pause at any time. A large 3D FORGE wordmark sits *behind* the athlete: the athlete's body, and any moving equipment, pass in front of the letters and cast a soft shadow on them. A live "next class" chip shows the next open class and its spots.
 - **Scroll to lift:** a pinned section where scrolling plays one barbell rep frame by frame, with a coaching cue for each phase of the lift.
 - **Stacked program cards:** four program cards with looping footage that stack on top of each other as you scroll.
 - **Word-by-word tagline:** a pinned volt section where the tagline lights up one word at a time.
@@ -18,8 +18,8 @@ A demo landing page for a fictional strength and conditioning gym. It is built p
 ## Performance
 
 - About 165 KB of compressed JavaScript.
-- Each clip is 250 to 950 KB, with a 9:16 cut for phones and a 16:9 cut for desktop.
-- Videos only download and play while they are on screen.
+- Hero clips are 0.9 to 1.6 MB, other clips 250 to 950 KB. Each comes in a 9:16 cut for phones and a 16:9 cut for desktop.
+- Videos only download and play while they are on screen, and only the front card in the program stack plays.
 - Data saver and reduced motion users get still poster images instead of video.
 
 ## Stack
@@ -38,6 +38,30 @@ npm run preview    # serve the build
 ## Deploy
 
 Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages. Set it up once: in the repo, go to **Settings → Pages → Source** and choose **GitHub Actions**. The base path follows the repository name automatically.
+
+## How the hero depth effect works
+
+Each hero clip (`public/video/hero-<program>-<tall|wide>.mp4`) is a single H.264 video. Every frame holds two things side by side:
+
+- the colour footage, and
+- a half-resolution mask of the athlete.
+
+At runtime, a small WebGL compositor (`src/lib/heroGL.ts`) draws three layers in order: the footage, then a 3D wordmark it renders once per screen size, then the athlete, cut out with the mask. Keeping the footage and the mask in one stream keeps them perfectly in sync. It also works on iPhone Safari, which can't play transparent video. Browsers without WebGL, and visitors with Data Saver on, get a plain video fallback.
+
+The masks are made offline by `tools/hero-matte.py`:
+
+- **Person mask:** [RobustVideoMatting](https://github.com/PeterL1n/RobustVideoMatting), run with ONNX Runtime.
+- **Equipment:** for tripod shots, it also adds background subtraction, so barbells and plates count as foreground.
+
+To regenerate with new footage:
+
+```bash
+pip install onnxruntime opencv-python-headless numpy
+# download rvm_resnet50_fp32.onnx from the RobustVideoMatting releases page
+python tools/hero-matte.py <raw_clips_dir> <work_dir> <out_dir> <path/to/ffmpeg> rvm_resnet50_fp32.onnx
+```
+
+Then copy each `<out_dir>/<name>-<cut>.mp4` and `.jpg` to `public/video/hero-<name>-<cut>.*`. The pack layout in the script must match `PACK` in `src/lib/heroGL.ts`.
 
 ## Customize for a real gym
 

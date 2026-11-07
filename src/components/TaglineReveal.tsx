@@ -22,8 +22,8 @@ export function TaglineReveal() {
   let index = 0
 
   return (
-    <section aria-label="Our approach" className="bg-volt text-ink">
-      <div ref={ref} className={reduced ? '' : 'relative h-[240vh]'}>
+    <section aria-label="Our approach" data-nav-tone="solid" className="bg-volt text-ink">
+      <div ref={ref} className={reduced ? '' : 'relative h-[190vh] md:h-[240vh]'}>
         <div className={reduced ? 'py-24' : 'sticky top-0 flex h-[100svh] items-center'}>
           <div className="mx-auto w-full max-w-7xl px-4 md:px-8">
             <p className="caption-3 font-mono uppercase tracking-widest">The Forge method</p>

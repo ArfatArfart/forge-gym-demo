@@ -54,16 +54,27 @@ export function RepSection() {
     return () => io.disconnect()
   }, [reduced, cut])
 
+  // Only run the scrub loop while the section is near the viewport.
+  const [near, setNear] = useState(false)
+  useEffect(() => {
+    const el = outer.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: '200px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   // Scrub loop: eases the playhead toward the scroll position each frame.
   useEffect(() => {
-    if (reduced) return
+    if (reduced || !near) return
     let raf = 0
     const tick = () => {
       const v = video.current
       shown.current += (target.current - shown.current) * 0.18
       if (v && v.duration && v.readyState >= 1) {
         const t = shown.current * (v.duration - 0.05)
-        if (Math.abs(v.currentTime - t) > 1 / 48) v.currentTime = t
+        // Phones stutter if seeks pile up, so wait for the previous one to land.
+        if (!v.seeking && Math.abs(v.currentTime - t) > 1 / 48) v.currentTime = t
         const i = cueAt(t)
         setCue((c) => (c === i ? c : i))
         if (clock.current) clock.current.textContent = `00:0${t.toFixed(1)}`
@@ -73,13 +84,13 @@ export function RepSection() {
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [reduced])
+  }, [reduced, near])
 
   const active = CUES[cue]
 
   return (
     <section id="coaching" aria-labelledby="rep-title" className="relative scroll-mt-24 bg-ink">
-      <div ref={outer} className={reduced ? 'py-16 md:py-24' : 'relative h-[380vh]'}>
+      <div ref={outer} className={reduced ? 'py-16 md:py-24' : 'relative h-[300vh] md:h-[380vh]'}>
         <div className={reduced ? '' : 'sticky top-0 flex h-[100svh] items-center overflow-hidden py-24 md:py-16'}>
           <div className="mx-auto grid h-full w-full max-w-7xl grid-rows-[auto_1fr] gap-6 px-4 md:px-8 lg:grid-cols-[1fr_1.3fr] lg:grid-rows-1 lg:items-center lg:gap-16">
             {/* Copy and cue list */}

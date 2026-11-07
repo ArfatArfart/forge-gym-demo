@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react'
+import { useRef, useState } from 'react'
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { ArrowRight } from '@phosphor-icons/react'
 import { SectionHeader } from './ui/SectionHeader'
 import { LoopVideo } from './ui/LoopVideo'
@@ -9,6 +9,12 @@ export function Programs() {
   const stack = useRef<HTMLDivElement>(null)
   const reduced = !!useReducedMotion()
   const { scrollYProgress } = useScroll({ target: stack, offset: ['start start', 'end end'] })
+  // Only the card on top of the stack plays its footage.
+  const [front, setFront] = useState(0)
+  useMotionValueEvent(scrollYProgress, 'change', (p) => {
+    const i = Math.min(PROGRAMS.length - 1, Math.max(0, Math.floor(p * PROGRAMS.length)))
+    setFront((f) => (f === i ? f : i))
+  })
 
   return (
     <section id="programs" aria-labelledby="programs-title" className="scroll-mt-24 bg-ink py-16 md:py-24">
@@ -27,7 +33,7 @@ export function Programs() {
 
         <div ref={stack} className="mt-12 flex flex-col gap-6 md:mt-16">
           {PROGRAMS.map((p, i) => (
-            <ProgramCard key={p.id} p={p} i={i} progress={scrollYProgress} reduced={reduced} />
+            <ProgramCard key={p.id} p={p} i={i} progress={scrollYProgress} reduced={reduced} front={front === i} />
           ))}
         </div>
       </div>
@@ -45,7 +51,7 @@ function Intensity({ value }: { value: number }) {
   )
 }
 
-function ProgramCard({ p, i, progress, reduced }: { p: Program; i: number; progress: MotionValue<number>; reduced: boolean }) {
+function ProgramCard({ p, i, progress, reduced, front }: { p: Program; i: number; progress: MotionValue<number>; reduced: boolean; front: boolean }) {
   const n = PROGRAMS.length
   // Cards behind the newest one shrink a little, which gives the stack its depth.
   const scale = useTransform(progress, [i / n, 1], [1, 1 - (n - 1 - i) * 0.04])
@@ -89,7 +95,7 @@ function ProgramCard({ p, i, progress, reduced }: { p: Program; i: number; progr
           </dl>
           <a
             href="#schedule"
-            className="title-4 group mt-6 hidden items-center gap-2 self-start rounded-full text-volt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt md:inline-flex"
+            className="caption-1 md:title-4 group -my-3 mt-1 inline-flex items-center gap-2 self-start rounded-full py-3 text-volt md:my-0 md:py-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt md:mt-6"
           >
             {p.times}
             <ArrowRight size={14} weight="bold" className="transition-transform duration-300 ease-forge group-hover:translate-x-0.5" aria-hidden="true" />
@@ -99,7 +105,7 @@ function ProgramCard({ p, i, progress, reduced }: { p: Program; i: number; progr
         {/* Outer radius 32 with an 8px inset gives the footage 24 (B3). */}
         <div className="order-1 p-2 md:order-2">
           <div className="relative h-48 overflow-hidden rounded-3xl sm:h-64 md:h-full md:min-h-96">
-            <LoopVideo name={p.video} className="absolute inset-0 size-full object-cover" />
+            <LoopVideo name={p.video} active={front} className="absolute inset-0 size-full object-cover" />
             <span className="absolute inset-0 bg-ink/10" aria-hidden="true" />
           </div>
         </div>
