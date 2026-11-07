@@ -8,16 +8,19 @@ type Props = {
   label?: string
   /** Lets a parent keep only one of several on-screen loops playing (phones decode one at a time well). */
   active?: boolean
+  /** Force a cut instead of following the screen (a landscape frame on a phone, for example). */
+  cut?: 'tall' | 'wide'
 }
 
 /**
  * Muted background loop that only downloads and plays while it is on screen and active.
  * Falls back to its poster for reduced motion and data saver.
  */
-export function LoopVideo({ name, className = '', label, active = true }: Props) {
+export function LoopVideo({ name, className = '', label, active = true, cut: forced }: Props) {
   const ref = useRef<HTMLVideoElement>(null)
   const inView = useRef(false)
-  const cut = useVideoCut()
+  const screenCut = useVideoCut()
+  const cut = forced ?? screenCut
   const reduced = useReducedMotion()
 
   const sync = useCallback(() => {

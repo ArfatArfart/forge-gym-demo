@@ -104,8 +104,9 @@ function ProgramCard({ p, i, progress, reduced, front }: { p: Program; i: number
 
         {/* Outer radius 32 with an 8px inset gives the footage 24 (B3). */}
         <div className="order-1 p-2 md:order-2">
-          <div className="relative h-48 overflow-hidden rounded-3xl sm:h-64 md:h-full md:min-h-96">
-            <LoopVideo name={p.video} active={front} className="absolute inset-0 size-full object-cover" />
+          {/* Phones show the whole 16:9 shot; side by side layouts fill the column. */}
+          <div className="relative aspect-video overflow-hidden rounded-3xl md:aspect-auto md:h-full md:min-h-96">
+            <LoopVideo name={p.video} cut="wide" active={front} className="absolute inset-0 size-full object-cover" />
             <span className="absolute inset-0 bg-ink/10" aria-hidden="true" />
           </div>
         </div>
