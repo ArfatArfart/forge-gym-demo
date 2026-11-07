@@ -7,8 +7,8 @@ A demo landing page for a fictional strength and conditioning gym. It is built p
 ## What's inside
 
 - **Story-style video hero with depth:** full-screen footage cycles through four programs like Instagram stories. Tap or swipe to switch, and pause at any time. A large 3D FORGE wordmark sits *behind* the athlete: the athlete's body, and any moving equipment, pass in front of the letters and cast a soft shadow on them. A live "next class" chip shows the next open class and its spots.
-- **Scroll to lift:** a pinned section where scrolling plays one barbell rep frame by frame, with a coaching cue for each phase of the lift.
-- **Stacked program cards:** four program cards with looping footage that stack on top of each other as you scroll.
+- **Scroll to lift:** a pinned section where scrolling plays one barbell rep frame by frame, with a coaching cue for each phase of the lift. Phones scrub an image sequence on a canvas (`public/video/rep-seq/`), crossfading between frames, because seeking a video on scroll is unreliable on iPhone. Larger screens scrub the video.
+- **Stacked program cards:** four program cards with looping footage that stack on top of each other as you scroll. Phones show the full 16:9 shot.
 - **Word-by-word tagline:** a pinned volt section where the tagline lights up one word at a time.
 - **Interactive schedule:** a swipeable day picker, spots left per class, and a "Book trial" button that fills in the booking form for you.
 - **Swipe carousels on phones:** coaches, results and pricing. Pricing opens on the featured plan.
@@ -19,6 +19,7 @@ A demo landing page for a fictional strength and conditioning gym. It is built p
 
 - About 165 KB of compressed JavaScript.
 - Hero clips are 0.9 to 1.6 MB, other clips 250 to 950 KB. Each comes in a 9:16 cut for phones and a 16:9 cut for desktop.
+- The phone rep sequence is 92 WebP frames (2.2 MB). It starts loading shortly before the section comes into view, coarse frames first, so scrubbing works almost immediately. Data saver loads every fourth frame.
 - Videos only download and play while they are on screen, and only the front card in the program stack plays.
 - Data saver and reduced motion users get still poster images instead of video.
 
