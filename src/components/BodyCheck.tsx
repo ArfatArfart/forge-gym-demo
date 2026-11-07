@@ -134,7 +134,7 @@ export function BodyCheck() {
           {/* Phones: inputs, gauge, advice. Desktop: inputs above advice on the left, gauge on the right. */}
           <div className="grid gap-2 md:gap-4 lg:grid-cols-[1fr_1.1fr] lg:grid-rows-[auto_1fr]">
             {/* Inputs */}
-            <div className="flex flex-col gap-5 rounded-4xl border border-white/10 bg-coal p-4 md:gap-6 md:p-8 lg:col-start-1 lg:row-start-1">
+            <div className="flex flex-col gap-4 rounded-4xl border border-white/10 bg-coal p-4 md:gap-6 md:p-8 lg:col-start-1 lg:row-start-1">
               <div className="flex items-center justify-between gap-4">
                 <p className="title-3 text-white">Your details</p>
                 <div role="group" aria-label="Units" className="flex rounded-full bg-steel p-1">
@@ -196,11 +196,14 @@ export function BodyCheck() {
             </div>
 
             {/* Gauge */}
-            <div className="flex flex-col justify-center rounded-4xl border border-white/10 bg-coal p-4 md:p-8 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <div className="order-first flex flex-col justify-center rounded-4xl border border-white/10 bg-coal p-4 md:p-8 lg:order-none lg:col-start-2 lg:row-span-2 lg:row-start-1">
               <Gauge bmi={bmi} zone={zone} />
-              <p className="caption-5 md:caption-2 mt-4 text-dim md:mt-6">
-                BMI is a quick screening number, not a diagnosis. It cannot tell muscle from fat, so strong lifters often read high. Your
-                coach measures body fat and mobility at your free assessment.
+              <p className="caption-5 md:caption-2 mt-3 text-center text-dim md:mt-6 md:text-left">
+                <span className="md:hidden">A screening number, not a diagnosis. Your coach measures body fat at the free assessment.</span>
+                <span className="hidden md:inline">
+                  BMI is a quick screening number, not a diagnosis. It cannot tell muscle from fat, so strong lifters often read high. Your
+                  coach measures body fat and mobility at your free assessment.
+                </span>
               </p>
             </div>
 
@@ -217,10 +220,10 @@ export function BodyCheck() {
                     transition={{ duration: 0.3, ease: EASE }}
                   >
                     <p className="title-2 md:title-1 mt-2 text-white">{zone.program}</p>
-                    <p className="body-6 mt-1 text-muted">{zone.advice}</p>
+                    <p className="body-6 mt-1 hidden text-muted md:block">{zone.advice}</p>
                   </motion.div>
                 </AnimatePresence>
-                <Button href="#book" arrow className="mt-6 w-full sm:w-auto">
+                <Button href="#book" arrow className="mt-3 w-full max-md:button-sm max-md:min-h-11 sm:w-auto md:mt-6">
                   Book a free assessment
                 </Button>
               </div>
@@ -277,7 +280,7 @@ function Gauge({ bmi, zone }: { bmi: number; zone: Zone }) {
         ref={ref}
         role="img"
         aria-label={`BMI ${bmi.toFixed(1)}, ${zone.label.toLowerCase()}`}
-        className="relative mx-auto aspect-[240/136] w-full max-w-[460px]"
+        className="relative mx-auto aspect-[240/136] w-full max-w-[300px] md:max-w-[460px]"
       >
         <svg viewBox="0 0 240 136" className="absolute inset-0 size-full overflow-visible" aria-hidden="true">
           {/* Track, then the four zones with hairline gaps between them */}
@@ -326,8 +329,8 @@ function Gauge({ bmi, zone }: { bmi: number; zone: Zone }) {
         />
       </div>
 
-      <div className="mt-3 flex flex-col items-center text-center md:mt-4" aria-live="polite">
-        <p className="caption-3 font-mono uppercase tracking-widest text-muted">Your BMI</p>
+      <div className="mt-2 flex flex-col items-center text-center md:mt-4" aria-live="polite">
+        <p className="caption-3 hidden font-mono uppercase tracking-widest text-muted md:block">Your BMI</p>
         <motion.p className="heading-4 md:heading-2 mt-1 font-mono text-white">{display}</motion.p>
         <AnimatePresence mode="wait" initial={false}>
           <motion.p
@@ -343,7 +346,7 @@ function Gauge({ bmi, zone }: { bmi: number; zone: Zone }) {
         </AnimatePresence>
       </div>
 
-      <ul className="mt-4 grid grid-cols-4 gap-1 md:mt-6" aria-label="BMI ranges">
+      <ul className="mt-6 hidden grid-cols-4 gap-1 md:grid" aria-label="BMI ranges">
         {ZONES.map((z) => (
           <li key={z.id} className={`flex flex-col items-center gap-1 transition-opacity duration-300 ${z.id === zone.id ? 'opacity-100' : 'opacity-50'}`}>
             <span className={`h-1 w-full rounded-full ${z.fill}`} aria-hidden="true" />

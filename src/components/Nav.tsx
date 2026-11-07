@@ -23,6 +23,7 @@ const focusRing =
 export function Nav() {
   const active = useActiveSection(IDS)
   const solid = useSolidNav()
+  const atTop = useAtTop()
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -49,13 +50,13 @@ export function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+      <header className="fixed inset-x-0 top-3 z-50 flex justify-center px-4 md:top-4">
         <motion.nav
           aria-label="Main"
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
-          className={`flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 p-2 transition-colors md:backdrop-blur-xl duration-500 ease-forge md:w-auto md:max-w-none md:justify-start ${solid ? "bg-ink/95 md:bg-ink/90" : "bg-coal/95 md:bg-coal/70"}`}
+          className={`flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 p-1.5 transition-colors md:backdrop-blur-xl duration-500 ease-forge md:w-auto md:max-w-none md:justify-start md:p-2 ${solid ? "bg-ink/95 md:bg-ink/90" : "bg-coal/95 md:bg-coal/70"} ${atTop && !open ? "max-md:border-transparent max-md:bg-transparent" : ""}`}
         >
           <a href="#top" aria-label="Forge Athletic Club, back to top" className={`rounded-full px-3 py-2 ${focusRing}`}>
             <Logo />
@@ -176,6 +177,25 @@ export function Nav() {
 }
 
 /** True while a section marked data-nav-tone="solid" (the volt band) sits under the nav. */
+/** True while the page sits at the very top (phones show the header bare over the hero). */
+function useAtTop() {
+  const [atTop, setAtTop] = useState(true)
+  useEffect(() => {
+    let raf = 0
+    const check = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => setAtTop(window.scrollY < 24))
+    }
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', check)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+  return atTop
+}
+
 function useSolidNav() {
   const [solid, setSolid] = useState(false)
   useEffect(() => {

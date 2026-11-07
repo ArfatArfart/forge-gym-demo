@@ -6,21 +6,22 @@ import { EASE } from '../lib/motion'
 import { whatsappLink } from '../lib/data'
 
 /**
- * Thumb zone booking bar for phones. Appears once the hero CTA has scrolled away and stays
- * docked at the bottom from there to the end of the page (the footer pads itself to clear it).
+ * Thumb zone booking bar for phones. Appears when the visitor reaches the booking section at
+ * the bottom of the page and stays docked to the end (the footer pads itself to clear it).
  */
 export function MobileBar() {
-  const [pastHero, setPastHero] = useState(false)
+  const [atEnd, setAtEnd] = useState(false)
 
   useEffect(() => {
-    const hero = document.getElementById('top')
-    if (!hero) return
-    const io = new IntersectionObserver(([e]) => setPastHero(!e.isIntersecting), { rootMargin: '-40% 0px 0px 0px' })
-    io.observe(hero)
+    const book = document.getElementById('book')
+    if (!book) return
+    // Visible while the booking section is on screen or already scrolled past (footer).
+    const io = new IntersectionObserver(([e]) => setAtEnd(e.isIntersecting || e.boundingClientRect.top < 0))
+    io.observe(book)
     return () => io.disconnect()
   }, [])
 
-  const show = pastHero
+  const show = atEnd
 
   return (
     <AnimatePresence>

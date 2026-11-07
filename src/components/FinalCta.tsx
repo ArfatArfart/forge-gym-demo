@@ -30,7 +30,8 @@ function validate(f: Fields): Errors {
 }
 
 const inputBase =
-  'body-3 w-full rounded-xl border bg-ink px-4 py-3 text-white placeholder:text-dim transition-colors duration-300 ease-forge ' +
+  // 16 px text on phones too: iOS zooms into smaller inputs.
+  'body-3 w-full rounded-xl border bg-ink px-3 py-2.5 text-white md:px-4 md:py-3 placeholder:text-dim transition-colors duration-300 ease-forge ' +
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-volt disabled:opacity-50'
 
 function FieldError({ id, msg }: { id: string; msg?: string }) {
@@ -60,30 +61,30 @@ export function FinalCta() {
       <LoopVideo name="barbell" className="absolute inset-0 size-full object-cover" />
       <span className="absolute inset-0 bg-ink/75" aria-hidden="true" />
 
-      <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-4 md:px-8 lg:grid-cols-2 lg:items-center lg:gap-16">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-8 px-4 md:gap-12 md:px-8 lg:grid-cols-2 lg:items-center lg:gap-16">
         <Reveal>
           <p className="caption-3 font-mono uppercase tracking-widest text-volt">Free trial class</p>
-          <h2 id="book-title" className="heading-3 md:heading-1 mt-4 max-w-[680px]">
+          <h2 id="book-title" className="heading-4 md:heading-1 mt-3 max-w-[680px] md:mt-4">
             <span className="text-hero">
               Your first class <br />
               is on us
             </span>
           </h2>
-          <p className="body-3 md:body-7 mt-6 max-w-md text-white/80">
+          <p className="body-6 md:body-7 mt-3 max-w-md text-white/80 md:mt-6">
             Book a class, meet your coach and lift with the group. If it is not for you, you have lost nothing but an
             hour.
           </p>
-          <ul className="mt-8 flex flex-col gap-4">
+          <ul className="mt-5 flex flex-col gap-2.5 md:mt-8 md:gap-4">
             {[
               { icon: CreditCard, text: 'No card needed, no sales pitch' },
               { icon: Clock, text: 'A full 45 to 90 minute coached class' },
               { icon: Clipboard, text: 'Free 30 minute movement assessment' },
             ].map(({ icon: I, text }) => (
               <li key={text} className="flex items-center gap-3">
-                <span className="flex size-8 items-center justify-center rounded-lg bg-volt text-ink">
+                <span className="flex size-7 items-center justify-center rounded-lg bg-volt text-ink md:size-8">
                   <I size={16} weight="bold" aria-hidden="true" />
                 </span>
-                <span className="body-2 text-white">{text}</span>
+                <span className="body-6 md:body-2 text-white">{text}</span>
               </li>
             ))}
           </ul>
@@ -91,14 +92,14 @@ export function FinalCta() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-8 flex items-center gap-4 rounded-3xl border border-white/15 bg-ink/75 p-4 transition-colors md:bg-ink/50 md:backdrop-blur-md duration-300 ease-forge hover:bg-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt sm:max-w-md"
+            className="group mt-5 flex items-center gap-3 rounded-3xl border border-white/15 bg-ink/75 p-3 md:mt-8 md:gap-4 md:p-4 transition-colors md:bg-ink/50 md:backdrop-blur-md duration-300 ease-forge hover:bg-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt sm:max-w-md"
           >
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#25d366] text-white">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#25d366] text-white md:size-12 md:rounded-2xl">
               <WhatsappLogo size={26} weight="fill" aria-hidden="true" />
             </span>
             <span className="flex-1">
-              <span className="title-3 block text-white">Prefer WhatsApp?</span>
-              <span className="caption-2 text-muted">Message the front desk. We reply within the hour, 6 am to 9 pm.</span>
+              <span className="title-4 md:title-3 block text-white">Prefer WhatsApp?</span>
+              <span className="caption-5 md:caption-2 text-muted">Message the front desk. We reply within the hour, 6 am to 9 pm.</span>
             </span>
             <ArrowUpRight size={18} weight="bold" aria-hidden="true" className="text-white transition-transform duration-300 ease-forge group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
@@ -164,7 +165,7 @@ function BookingForm() {
   const loading = status === 'loading'
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-coal/95 p-6 md:bg-coal/90 md:p-8 md:backdrop-blur-xl">
+    <div className="rounded-3xl border border-white/10 bg-coal/95 p-4 md:bg-coal/90 md:p-8 md:backdrop-blur-xl">
       <AnimatePresence mode="wait" initial={false}>
         {status === 'success' ? (
           <motion.div
@@ -215,9 +216,9 @@ function BookingForm() {
             transition={{ duration: 0.4, ease: EASE }}
             aria-describedby={id('note')}
           >
-            <fieldset disabled={loading} className="flex flex-col gap-6">
+            <fieldset disabled={loading} className="flex flex-col gap-4 md:gap-6">
               <legend className="sr-only">Book your free trial class</legend>
-              <div className="grid gap-6 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 md:gap-6">
                 <div>
                   <label htmlFor={id('name')} className="title-4 text-white">
                     Full name
@@ -256,7 +257,7 @@ function BookingForm() {
                 </div>
               </div>
 
-              <div className="grid gap-6 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 md:gap-6">
                 <div>
                   <label htmlFor={id('phone')} className="title-4 text-white">
                     Phone <span className="caption-5 text-dim">optional</span>
@@ -317,7 +318,7 @@ function BookingForm() {
                     return (
                       <label
                         key={x}
-                        className={`caption-1 flex min-h-12 cursor-pointer items-center justify-center rounded-xl border px-2 py-2 text-center sm:min-h-0 sm:px-3 sm:py-3 transition-colors duration-300 ease-forge has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-volt ${
+                        className={`caption-1 flex min-h-11 cursor-pointer items-center justify-center rounded-xl border px-2 py-2 text-center sm:min-h-0 sm:px-3 sm:py-3 transition-colors duration-300 ease-forge has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-volt ${
                           checked ? 'border-volt bg-volt/10 text-white' : 'border-white/10 bg-ink text-muted hover:border-white/20 hover:text-white'
                         }`}
                       >

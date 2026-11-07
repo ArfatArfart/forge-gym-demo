@@ -111,7 +111,7 @@ export function Hero() {
       >
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[680px]">
-            <NextClassChip className="mb-4 inline-flex max-w-full md:mb-6" />
+            <NextClassChip className="mb-6 hidden max-w-full md:inline-flex" />
             <div className="h-4 overflow-hidden">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.p
@@ -148,7 +148,7 @@ export function Hero() {
             </motion.p>
 
             <motion.div {...enter(0.95)} className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 md:mt-6">
-              <Button href="#book" arrow className="w-full sm:w-auto">
+              <Button href="#book" arrow className="self-start max-md:button-sm max-md:min-h-11 max-md:px-4">
                 Book your free trial class
               </Button>
               <span className="hidden items-center gap-2 md:flex">
