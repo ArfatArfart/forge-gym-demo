@@ -146,7 +146,7 @@ export function Hero() {
               ))}
             </h1>
 
-            <motion.p {...enter(0.8)} className="body-6 sm:body-3 lg:body-7 mt-4 max-w-md text-white/80 lg:max-w-lg">
+            <motion.p {...enter(0.8)} className="body-3 lg:body-7 mt-4 hidden max-w-md text-white/80 md:block lg:max-w-lg">
               Small group strength and conditioning in Eastside Portland. Every class capped at 10 and run by a certified
               coach.
             </motion.p>
@@ -155,7 +155,7 @@ export function Hero() {
               <Button href="#book" arrow className="w-full sm:w-auto">
                 Book your free trial class
               </Button>
-              <span className="flex items-center justify-center gap-2 sm:justify-start">
+              <span className="hidden items-center gap-2 md:flex">
                 <span className="flex gap-0.5 text-volt" aria-hidden="true">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} size={13} weight="fill" />

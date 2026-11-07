@@ -62,7 +62,7 @@ function ProgramCard({ p, i, progress, reduced, front }: { p: Program; i: number
         style={{ scale: reduced ? 1 : scale }}
         className="grid origin-top overflow-hidden rounded-4xl border border-white/10 bg-coal md:grid-cols-[1fr_1.1fr]"
       >
-        <div className="order-2 flex flex-col p-6 md:order-1 md:p-8 lg:p-12">
+        <div className="order-2 flex flex-col px-4 pb-4 pt-3 md:order-1 md:p-8 lg:p-12">
           <div className="flex items-center justify-between gap-4">
             <span className="caption-3 font-mono uppercase tracking-widest text-dim">
               0{i + 1} / 0{n}
@@ -73,11 +73,11 @@ function ProgramCard({ p, i, progress, reduced, front }: { p: Program; i: number
               {p.level}
             </span>
           </div>
-          <h3 className="heading-4 lg:heading-3 mt-4 text-white md:mt-8">{p.name}</h3>
-          <p className="title-2 mt-2 text-white">{p.promise}</p>
-          <p className="body-6 lg:body-3 mt-3 text-muted">{p.body}</p>
+          <h3 className="heading-6 md:heading-4 lg:heading-3 mt-3 text-white md:mt-8">{p.name}</h3>
+          <p className="title-4 md:title-2 mt-1 text-white md:mt-2">{p.promise}</p>
+          <p className="caption-1 md:body-6 lg:body-3 mt-2 text-muted md:mt-3">{p.body}</p>
 
-          <dl className="mt-6 grid grid-cols-3 gap-4 md:mt-auto md:pt-8">
+          <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-white/10 pt-3 md:mt-auto md:gap-4 md:border-0 md:pt-8">
             <div>
               <dt className="caption-4 font-mono uppercase tracking-widest text-dim">Length</dt>
               <dd className="title-4 mt-1 font-mono text-white">{p.duration}</dd>
