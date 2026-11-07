@@ -14,6 +14,7 @@ import { MobileBar } from './components/MobileBar'
 import { Coaches } from './components/Coaches'
 import { Testimonials } from './components/Testimonials'
 import { Pricing } from './components/Pricing'
+import { BodyCheck } from './components/BodyCheck'
 import { Faq } from './components/Faq'
 import { FinalCta } from './components/FinalCta'
 import { Footer } from './components/Footer'
@@ -48,6 +49,7 @@ export default function App() {
         <Schedule />
         <Coaches />
         <Testimonials />
+        <BodyCheck />
         <Pricing />
         <Faq />
         <FinalCta />

@@ -19,6 +19,7 @@ const CUES = [
 const SEQ_FRAMES = 92
 const SEQ_FPS = 12
 const SEQ_DURATION = (SEQ_FRAMES - 1) / SEQ_FPS
+const SEQ_WIDTH = 640
 const seqSrc = (i: number) => asset(`video/rep-seq/${String(i).padStart(2, '0')}.webp`)
 
 const cueAt = (t: number) => {
@@ -38,6 +39,7 @@ export function RepSection() {
   const shown = useRef(0)
   const [cue, setCue] = useState(0)
   const [seqReady, setSeqReady] = useState(false)
+  const readyRef = useRef(false)
   const reduced = !!useReducedMotion()
   const cut = useVideoCut()
   const phone = cut === 'tall'
@@ -52,6 +54,7 @@ export function RepSection() {
     if (!phone || reduced) return
     const s = new FrameSequence(SEQ_FRAMES, seqSrc, prefersSaveData() ? 4 : 1)
     seq.current = s
+    readyRef.current = false
     setSeqReady(false)
     const el = outer.current
     const io = new IntersectionObserver(
@@ -75,7 +78,8 @@ export function RepSection() {
     const c = canvas.current
     if (!phone || reduced || !c) return
     const ro = new ResizeObserver(() => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      // Never render above the frames' own 640 px width: sharper is impossible, slower is not.
+      const dpr = Math.min(window.devicePixelRatio || 1, 2, SEQ_WIDTH / Math.max(1, c.clientWidth))
       c.width = Math.max(1, Math.round(c.clientWidth * dpr))
       c.height = Math.max(1, Math.round(c.clientHeight * dpr))
       seq.current?.draw(c, shown.current)
@@ -123,7 +127,10 @@ export function RepSection() {
       if (phone) {
         const c = canvas.current
         if (c && seq.current?.draw(c, shown.current)) {
-          setSeqReady(true)
+          if (!readyRef.current) {
+            readyRef.current = true
+            setSeqReady(true)
+          }
           t = shown.current * SEQ_DURATION
         }
       } else {
@@ -150,11 +157,11 @@ export function RepSection() {
 
   const hud = (
     <div className="absolute inset-x-4 top-4 flex items-center justify-between" aria-hidden="true">
-      <span className="caption-3 inline-flex items-center gap-2 rounded-full bg-ink/60 px-3 py-1 font-mono uppercase tracking-widest text-white backdrop-blur-md">
+      <span className="caption-3 inline-flex items-center gap-2 rounded-full bg-ink/75 px-3 py-1 font-mono uppercase tracking-widest text-white md:bg-ink/60 md:backdrop-blur-md">
         <span className="size-1.5 rounded-full bg-volt animate-pulse-dot" />
         Coach view
       </span>
-      <span className="caption-3 rounded-full bg-ink/60 px-3 py-1 font-mono text-white backdrop-blur-md">
+      <span className="caption-3 rounded-full bg-ink/75 px-3 py-1 font-mono text-white md:bg-ink/60 md:backdrop-blur-md">
         <span ref={clock}>00:00.0</span>
       </span>
     </div>

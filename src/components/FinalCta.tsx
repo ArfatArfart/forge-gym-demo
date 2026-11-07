@@ -91,7 +91,7 @@ export function FinalCta() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-8 flex items-center gap-4 rounded-3xl border border-white/15 bg-ink/50 p-4 backdrop-blur-md transition-colors duration-300 ease-forge hover:bg-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt sm:max-w-md"
+            className="group mt-8 flex items-center gap-4 rounded-3xl border border-white/15 bg-ink/75 p-4 transition-colors md:bg-ink/50 md:backdrop-blur-md duration-300 ease-forge hover:bg-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt sm:max-w-md"
           >
             <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#25d366] text-white">
               <WhatsappLogo size={26} weight="fill" aria-hidden="true" />
@@ -164,7 +164,7 @@ function BookingForm() {
   const loading = status === 'loading'
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-coal/90 p-6 backdrop-blur-xl md:p-8">
+    <div className="rounded-3xl border border-white/10 bg-coal/95 p-6 md:bg-coal/90 md:p-8 md:backdrop-blur-xl">
       <AnimatePresence mode="wait" initial={false}>
         {status === 'success' ? (
           <motion.div

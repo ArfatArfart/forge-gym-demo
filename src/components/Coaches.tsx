@@ -35,7 +35,7 @@ export function Coaches() {
                   {c.lift.label} · {c.lift.value}
                 </span>
                 {/* Card radius 32 with a 16px inset gives the panel 16 (B3). */}
-                <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-ink/70 p-4 backdrop-blur-xl">
+                <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-ink/85 p-4 md:bg-ink/70 md:backdrop-blur-xl">
                   <h3 className="title-1 text-white">{c.name}</h3>
                   <p className="body-6 text-muted">{c.role}</p>
                   <ul className="mt-3 flex flex-wrap gap-2">

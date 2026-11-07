@@ -125,14 +125,47 @@ function GLMedia({ index, running, motionOk, cut, scale, onWord, onFail }: Props
   }, [running, index, cut])
 
   // Draw loop while playing or fading; otherwise draw on demand.
+  // The footage is 24 fps, so between crossfades only redraw when the decoder has a new frame:
+  // that skips most of the texture uploads a 60 or 120 Hz screen would otherwise trigger.
   useEffect(() => {
     let raf = 0
+    let vfc = 0
+    let fresh = true
+    let lastTime = -1
+    let wasFading = true
+    const v = vids.current[index]
+    type VfcVideo = HTMLVideoElement & {
+      requestVideoFrameCallback?: (cb: () => void) => number
+      cancelVideoFrameCallback?: (id: number) => void
+    }
+    const vv = v as VfcVideo | null
+    const hasVfc = !!vv?.requestVideoFrameCallback
+    const onFrame = () => {
+      fresh = true
+      if (vv && running) vfc = vv.requestVideoFrameCallback!(onFrame)
+    }
+    if (hasVfc && running) vfc = vv!.requestVideoFrameCallback!(onFrame)
     const loop = () => {
-      const fading = draw()
+      const f = fade.current
+      const fading = f.from >= 0 && performance.now() - f.start < FADE_MS
+      // Without frame callbacks, fall back to watching the playhead.
+      if (!hasVfc && v && v.currentTime !== lastTime) {
+        lastTime = v.currentTime
+        fresh = true
+      }
+      // One extra draw when a fade ends, so the last frame lands exactly on the new clip.
+      if (fading || fresh || wasFading) {
+        fresh = false
+        draw()
+      }
+      wasFading = fading
       if (running || fading) raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
+    return () => {
+      cancelAnimationFrame(raf)
+      if (vfc && vv?.cancelVideoFrameCallback) vv.cancelVideoFrameCallback(vfc)
+    }
   }, [running, index, cut, draw])
 
   return (

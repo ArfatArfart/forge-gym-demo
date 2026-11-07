@@ -42,7 +42,7 @@ export function MobileBar() {
           transition={{ duration: 0.5, ease: EASE }}
           className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden"
         >
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-coal/85 p-2 backdrop-blur-xl">
+          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-coal/[0.97] p-2">
             <Button href="#book" arrow className="flex-1">
               Book free trial
             </Button>

@@ -17,6 +17,10 @@
   --color-volt-soft: #e2ff7a;
   --color-danger: #ff6b5e;
 
+  /* Body check gauge zones (underweight, overweight); healthy is volt, obese is danger */
+  --color-sky: #8ecbff;
+  --color-amber: #ffb547;
+
   /* Text */
   --color-muted: #a3a3a3;
   --color-dim: #6e6e6e;

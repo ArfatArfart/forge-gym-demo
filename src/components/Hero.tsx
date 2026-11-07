@@ -215,7 +215,7 @@ export function Hero() {
                 type="button"
                 onClick={() => setPaused((p) => !p)}
                 aria-label={paused ? 'Play program videos' : 'Pause program videos'}
-                className="flex size-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-colors duration-300 ease-forge hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt lg:hidden"
+                className="flex size-11 shrink-0 items-center justify-center rounded-full bg-ink/60 text-white transition-colors duration-300 ease-forge hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt lg:hidden"
               >
                 {paused ? <Play size={16} weight="fill" /> : <Pause size={16} weight="fill" />}
               </button>
@@ -238,7 +238,7 @@ function NextClassChip({ className = '', style }: { className?: string; style?: 
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: EASE, delay: 1.2 }}
-      className={`z-10 min-h-10 items-center gap-2 rounded-full border border-white/15 bg-ink/40 py-2 pl-3 pr-4 backdrop-blur-md transition-colors duration-300 ease-forge hover:bg-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt ${className}`}
+      className={`z-10 min-h-10 items-center gap-2 rounded-full border border-white/15 bg-ink/70 py-2 pl-3 pr-4 transition-colors lg:bg-ink/40 lg:backdrop-blur-md duration-300 ease-forge hover:bg-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt ${className}`}
     >
       <span className="size-2 shrink-0 rounded-full bg-volt animate-pulse-dot" aria-hidden="true" />
       <span className="caption-1 min-w-0 truncate text-white">

@@ -55,7 +55,7 @@ export function Nav() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
-          className={`flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 p-2 backdrop-blur-xl transition-colors duration-500 ease-forge md:w-auto md:max-w-none md:justify-start ${solid ? "bg-ink/90" : "bg-coal/70"}`}
+          className={`flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 p-2 transition-colors md:backdrop-blur-xl duration-500 ease-forge md:w-auto md:max-w-none md:justify-start ${solid ? "bg-ink/95 md:bg-ink/90" : "bg-coal/95 md:bg-coal/70"}`}
         >
           <a href="#top" aria-label="Forge Athletic Club, back to top" className={`rounded-full px-3 py-2 ${focusRing}`}>
             <Logo />
@@ -122,7 +122,7 @@ export function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="fixed inset-0 z-40 flex flex-col bg-ink/90 px-6 pb-12 pt-32 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-ink/[0.97] px-6 pb-12 pt-32 md:hidden"
           >
             <nav aria-label="Mobile" className="flex flex-1 flex-col">
               <ul className="flex flex-col gap-2">

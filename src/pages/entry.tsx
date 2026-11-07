@@ -20,7 +20,7 @@ function Shell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
-        <nav aria-label="Main" className="flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 bg-coal/70 p-2 backdrop-blur-xl">
+        <nav aria-label="Main" className="flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 bg-coal/95 p-2 md:bg-coal/70 md:backdrop-blur-xl">
           <a href={home} className="rounded-full px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt" aria-label="Forge Athletic Club home">
             <Logo compact />
           </a>

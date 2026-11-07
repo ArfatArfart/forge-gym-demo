@@ -241,7 +241,9 @@ export class HeroRenderer {
 
   /** Resizes the canvas, redraws the wordmark and updates the cover mapping. Returns the wordmark box. */
   resize(width: number, height: number, cut: Cut): WordLayout {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // Phones: the footage itself is 720 px wide, so 1.5x already shows every pixel of it and
+    // shades about half as many fragments as 2x. Larger screens keep 2x for the crisp wordmark.
+    const dpr = Math.min(window.devicePixelRatio || 1, cut === 'tall' ? 1.5 : 2)
     this.cut = cut
     this.canvas.width = Math.round(width * dpr)
     this.canvas.height = Math.round(height * dpr)
