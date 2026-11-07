@@ -6,31 +6,21 @@ import { EASE } from '../lib/motion'
 import { whatsappLink } from '../lib/data'
 
 /**
- * Thumb zone booking bar for phones. Appears once the hero CTA has scrolled away
- * and hides again while the booking form itself is on screen.
+ * Thumb zone booking bar for phones. Appears once the hero CTA has scrolled away and stays
+ * docked at the bottom from there to the end of the page (the footer pads itself to clear it).
  */
 export function MobileBar() {
   const [pastHero, setPastHero] = useState(false)
-  const [atForm, setAtForm] = useState(false)
 
   useEffect(() => {
     const hero = document.getElementById('top')
-    const form = document.getElementById('book')
-    const ios: IntersectionObserver[] = []
-    if (hero) {
-      const io = new IntersectionObserver(([e]) => setPastHero(!e.isIntersecting), { rootMargin: '-40% 0px 0px 0px' })
-      io.observe(hero)
-      ios.push(io)
-    }
-    if (form) {
-      const io = new IntersectionObserver(([e]) => setAtForm(e.isIntersecting), { threshold: 0.15 })
-      io.observe(form)
-      ios.push(io)
-    }
-    return () => ios.forEach((io) => io.disconnect())
+    if (!hero) return
+    const io = new IntersectionObserver(([e]) => setPastHero(!e.isIntersecting), { rootMargin: '-40% 0px 0px 0px' })
+    io.observe(hero)
+    return () => io.disconnect()
   }, [])
 
-  const show = pastHero && !atForm
+  const show = pastHero
 
   return (
     <AnimatePresence>

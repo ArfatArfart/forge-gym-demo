@@ -130,11 +130,11 @@ export function BodyCheck() {
           lead="Move the sliders to see your BMI, a healthy weight for your height, and what to eat and drink each day."
         />
 
-        <Reveal className="mt-10 md:mt-16">
+        <Reveal className="mt-8 md:mt-16">
           {/* Phones: inputs, gauge, advice. Desktop: inputs above advice on the left, gauge on the right. */}
           <div className="grid gap-2 md:gap-4 lg:grid-cols-[1fr_1.1fr] lg:grid-rows-[auto_1fr]">
             {/* Inputs */}
-            <div className="flex flex-col gap-6 rounded-4xl border border-white/10 bg-coal p-4 md:p-8 lg:col-start-1 lg:row-start-1">
+            <div className="flex flex-col gap-5 rounded-4xl border border-white/10 bg-coal p-4 md:gap-6 md:p-8 lg:col-start-1 lg:row-start-1">
               <div className="flex items-center justify-between gap-4">
                 <p className="title-3 text-white">Your details</p>
                 <div role="group" aria-label="Units" className="flex rounded-full bg-steel p-1">
@@ -183,21 +183,22 @@ export function BodyCheck() {
               />
 
               <dl className="grid grid-cols-2 gap-2">
-                <Stat label="Healthy weight for you" value={`${fmtW(low).split(' ')[0]} to ${fmtW(high)}`} />
+                <Stat label="Healthy weight for you" short="Healthy range" value={`${fmtW(low).split(' ')[0]} to ${fmtW(high)}`} />
                 <Stat
                   label="To reach that range"
+                  short="To get there"
                   value={gap ? `${gap.verb} ${fmtW(gap.kg)}` : 'You are in range'}
                   tone={gap ? undefined : 'text-volt'}
                 />
-                <Stat label="Protein per day" value={`${proteinG} g`} icon={<Barbell size={14} weight="bold" aria-hidden="true" />} />
-                <Stat label="Water per day" value={`${waterL} L`} icon={<Drop size={14} weight="bold" aria-hidden="true" />} />
+                <Stat label="Protein per day" short="Protein a day" value={`${proteinG} g`} icon={<Barbell size={14} weight="bold" aria-hidden="true" />} />
+                <Stat label="Water per day" short="Water a day" value={`${waterL} L`} icon={<Drop size={14} weight="bold" aria-hidden="true" />} />
               </dl>
             </div>
 
             {/* Gauge */}
             <div className="flex flex-col justify-center rounded-4xl border border-white/10 bg-coal p-4 md:p-8 lg:col-start-2 lg:row-span-2 lg:row-start-1">
               <Gauge bmi={bmi} zone={zone} />
-              <p className="caption-2 mt-6 text-dim">
+              <p className="caption-5 md:caption-2 mt-4 text-dim md:mt-6">
                 BMI is a quick screening number, not a diagnosis. It cannot tell muscle from fat, so strong lifters often read high. Your
                 coach measures body fat and mobility at your free assessment.
               </p>
@@ -215,7 +216,7 @@ export function BodyCheck() {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.3, ease: EASE }}
                   >
-                    <p className="title-1 mt-2 text-white">{zone.program}</p>
+                    <p className="title-2 md:title-1 mt-2 text-white">{zone.program}</p>
                     <p className="body-6 mt-1 text-muted">{zone.advice}</p>
                   </motion.div>
                 </AnimatePresence>
@@ -325,9 +326,9 @@ function Gauge({ bmi, zone }: { bmi: number; zone: Zone }) {
         />
       </div>
 
-      <div className="mt-4 flex flex-col items-center text-center" aria-live="polite">
+      <div className="mt-3 flex flex-col items-center text-center md:mt-4" aria-live="polite">
         <p className="caption-3 font-mono uppercase tracking-widest text-muted">Your BMI</p>
-        <motion.p className="heading-3 md:heading-2 mt-1 font-mono text-white">{display}</motion.p>
+        <motion.p className="heading-4 md:heading-2 mt-1 font-mono text-white">{display}</motion.p>
         <AnimatePresence mode="wait" initial={false}>
           <motion.p
             key={zone.id}
@@ -342,7 +343,7 @@ function Gauge({ bmi, zone }: { bmi: number; zone: Zone }) {
         </AnimatePresence>
       </div>
 
-      <ul className="mt-6 grid grid-cols-4 gap-1" aria-label="BMI ranges">
+      <ul className="mt-4 grid grid-cols-4 gap-1 md:mt-6" aria-label="BMI ranges">
         {ZONES.map((z) => (
           <li key={z.id} className={`flex flex-col items-center gap-1 transition-opacity duration-300 ${z.id === zone.id ? 'opacity-100' : 'opacity-50'}`}>
             <span className={`h-1 w-full rounded-full ${z.fill}`} aria-hidden="true" />
@@ -382,9 +383,9 @@ function Control(props: {
           {icon}
           {label}
         </label>
-        <span className="title-2 font-mono text-white">{valueText}</span>
+        <span className="title-3 md:title-2 font-mono text-white">{valueText}</span>
       </div>
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-2 flex items-center gap-3 md:mt-3">
         <StepButton label={`Less ${label.toLowerCase()}, one ${unitLabel}`} onClick={() => onChange(clamp(value - step))} disabled={value <= min}>
           <Minus size={16} weight="bold" />
         </StepButton>
@@ -433,14 +434,16 @@ function StepButton({ label, onClick, disabled, children }: { label: string; onC
   )
 }
 
-function Stat({ label, value, tone, icon }: { label: string; value: string; tone?: string; icon?: ReactNode }) {
+function Stat({ label, short, value, tone, icon }: { label: string; short?: string; value: string; tone?: string; icon?: ReactNode }) {
   return (
     <div className="rounded-2xl bg-steel p-3 md:p-4">
       <dt className="caption-4 flex items-center gap-1 font-mono uppercase tracking-widest text-dim">
         {icon}
-        {label}
+        {/* Phones get a short label so every tile reads on one line. */}
+        <span className={short ? 'md:hidden' : 'hidden'}>{short}</span>
+        <span className={short ? 'hidden md:inline' : ''}>{label}</span>
       </dt>
-      <dd className={`title-3 mt-1 ${tone ?? 'text-white'}`}>{value}</dd>
+      <dd className={`title-4 md:title-3 mt-1 ${tone ?? 'text-white'}`}>{value}</dd>
     </div>
   )
 }

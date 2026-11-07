@@ -19,7 +19,8 @@ export function Hero() {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [visible, setVisible] = useState(true)
-  const [word, setWord] = useState<WordLayout | null>(null)
+  // The wordmark box is still reported (the renderer needs a listener) but no longer positions anything.
+  const [, setWord] = useState<WordLayout | null>(null)
   const bars = useRef<(HTMLSpanElement | null)[]>([])
   const elapsed = useRef(0)
   const swipe = useRef<{ x: number; y: number } | null>(null)
@@ -103,11 +104,6 @@ export function Hero() {
       {/* Footage with the 3D wordmark composited behind the athlete */}
       <HeroMedia index={index} running={running} motionOk={motionOk} cut={cut} scale={reduced ? 1 : mediaScale} onWord={setWord} />
 
-      <NextClassChip
-        className="absolute left-4 top-[calc(7.5rem+20vw)] inline-flex max-w-[calc(100%-2rem)] md:left-8 lg:hidden [@media(max-height:720px)]:hidden"
-        style={word ? { top: word.top + word.height + 16 } : undefined}
-      />
-
       {/* Copy and controls */}
       <motion.div
         style={{ y: reduced ? 0 : contentY, opacity: contentOpacity }}
@@ -115,7 +111,7 @@ export function Hero() {
       >
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[680px]">
-            <NextClassChip className="mb-6 hidden max-w-full lg:inline-flex" />
+            <NextClassChip className="mb-4 inline-flex max-w-full md:mb-6" />
             <div className="h-4 overflow-hidden">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.p
@@ -131,7 +127,7 @@ export function Hero() {
               </AnimatePresence>
             </div>
 
-            <h1 id="hero-title" className="heading-3 sm:heading-2 lg:heading-1 mt-3">
+            <h1 id="hero-title" className="heading-4 sm:heading-2 lg:heading-1 mt-2 md:mt-3">
               {LINES.map((line, i) => (
                 <span key={line} className="-mb-4 block overflow-hidden pb-4">
                   <motion.span
@@ -151,7 +147,7 @@ export function Hero() {
               coach.
             </motion.p>
 
-            <motion.div {...enter(0.95)} className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <motion.div {...enter(0.95)} className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 md:mt-6">
               <Button href="#book" arrow className="w-full sm:w-auto">
                 Book your free trial class
               </Button>
@@ -241,7 +237,7 @@ function NextClassChip({ className = '', style }: { className?: string; style?: 
       className={`z-10 min-h-10 items-center gap-2 rounded-full border border-white/15 bg-ink/70 py-2 pl-3 pr-4 transition-colors lg:bg-ink/40 lg:backdrop-blur-md duration-300 ease-forge hover:bg-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt ${className}`}
     >
       <span className="size-2 shrink-0 rounded-full bg-volt animate-pulse-dot" aria-hidden="true" />
-      <span className="caption-1 min-w-0 truncate text-white">
+      <span className="caption-4 md:caption-1 min-w-0 truncate text-white">
         Next class · {next.cls.name} {when} {formatTime(next.cls.time)}
         <span className="text-white/60"> · {spotsLabel(next.cls.spots)}</span>
       </span>

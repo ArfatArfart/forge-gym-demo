@@ -10,13 +10,13 @@ export function Faq() {
 
   return (
     <section id="faq" aria-labelledby="faq-title" className="scroll-mt-24 bg-ink py-16 md:py-24">
-      <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 md:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 md:gap-12 md:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <Reveal className="lg:sticky lg:top-32 lg:self-start">
           <p className="caption-3 font-mono uppercase tracking-widest text-volt">FAQ</p>
           <h2 id="faq-title" className="heading-4 md:heading-2 mt-4 text-white">
             Questions before your first class
           </h2>
-          <p className="body-3 mt-6 text-muted">
+          <p className="body-6 md:body-3 mt-4 text-muted md:mt-6">
             Still unsure? Call the front desk on{' '}
             <a href="tel:+15035550148" className="text-white underline decoration-white/30 underline-offset-4 transition-colors duration-300 ease-forge hover:decoration-volt">
               {GYM.phone}
@@ -42,7 +42,7 @@ export function Faq() {
                       aria-expanded={isOpen}
                       aria-controls={`faq-a-${i}`}
                       onClick={() => setOpen(isOpen ? null : i)}
-                      className="title-2 flex w-full items-center justify-between gap-6 rounded-2xl p-6 text-left text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt"
+                      className="title-3 md:title-2 flex min-h-14 w-full items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-white md:gap-6 md:p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt"
                     >
                       {f.q}
                       <Plus
@@ -61,9 +61,9 @@ export function Faq() {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, ease: EASE }}
-                      className="px-6 pb-6"
+                      className="px-4 pb-4 md:px-6 md:pb-6"
                     >
-                      <p className="body-3 max-w-2xl text-muted">{f.a}</p>
+                      <p className="body-6 md:body-3 max-w-2xl text-muted">{f.a}</p>
                     </motion.div>
                   )}
                 </li>

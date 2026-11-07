@@ -28,14 +28,14 @@ export function Testimonials() {
           </div>
         </Reveal>
 
-        <Reveal className="mt-10 md:mt-16">
+        <Reveal className="mt-8 md:mt-16">
           <Rail label="Member results">
             {TESTIMONIALS.map((t) => (
-              <figure key={t.name} className="flex h-full flex-col rounded-4xl border border-white/10 bg-coal p-6 md:p-8">
-                <p className="heading-2 font-mono text-volt">{t.metric}</p>
-                <p className="caption-1 mt-2 text-white">{t.metricLabel}</p>
-                <blockquote className="body-3 mt-6 flex-1 text-muted">“{t.quote}”</blockquote>
-                <figcaption className="mt-8 flex items-center gap-3">
+              <figure key={t.name} className="flex h-full flex-col rounded-4xl border border-white/10 bg-coal p-5 md:p-8">
+                <p className="heading-4 md:heading-2 font-mono text-volt">{t.metric}</p>
+                <p className="caption-1 mt-1 text-white md:mt-2">{t.metricLabel}</p>
+                <blockquote className="body-6 md:body-3 mt-4 flex-1 text-muted md:mt-6">“{t.quote}”</blockquote>
+                <figcaption className="mt-5 flex items-center gap-3 md:mt-8">
                   <span className="title-4 flex size-10 items-center justify-center rounded-full bg-volt text-ink" aria-hidden="true">
                     {t.name
                       .split(' ')
