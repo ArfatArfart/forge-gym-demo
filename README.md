@@ -49,10 +49,12 @@ Each hero clip (`public/video/hero-<program>-<tall|wide>.mp4`) is a single H.264
 
 At runtime, a small WebGL compositor (`src/lib/heroGL.ts`) draws three layers in order: the footage, then a 3D wordmark it renders once per screen size, then the athlete, cut out with the mask. Keeping the footage and the mask in one stream keeps them perfectly in sync. It also works on iPhone Safari, which can't play transparent video. Browsers without WebGL, and visitors with Data Saver on, get a plain video fallback.
 
-The masks are made offline by `tools/hero-matte.py`:
+The masks are made offline in two stages:
 
-- **Person mask:** [RobustVideoMatting](https://github.com/PeterL1n/RobustVideoMatting), run with ONNX Runtime.
-- **Equipment:** for tripod shots, it also adds background subtraction, so barbells and plates count as foreground.
+- **Person matte:** [RobustVideoMatting](https://github.com/PeterL1n/RobustVideoMatting), run with ONNX Runtime (`tools/hero-matte.py` makes the colour intermediates and this matte, `tools/hero-sam/rvm_only.py` redoes the matte alone). It keeps soft hair edges.
+- **Athlete and equipment tracking:** [SAM 2.1](https://github.com/facebookresearch/sam2) follows the athlete, barbell, plates and ropes through every frame from a few prompts per clip (`tools/hero-sam/sam_track.py`, prompts in `tools/hero-sam/prompts/`).
+- **Compose:** `tools/hero-sam/compose.py` merges the two, draws the bar of a two plate barbell as a solid line between the plate centres (it is thin and motion blurred), firms up blurred ropes, removes specks and feathers edges by about 3 px so no letter rim shows on an object. Then it packs the clip.
+- **Review:** `tools/hero-sam/comp_sheet.py` renders contact sheets with solid letters across the wordmark band, so any frame where something slips behind the letters is easy to spot.
 
 To regenerate with new footage:
 
@@ -62,7 +64,7 @@ pip install onnxruntime opencv-python-headless numpy
 python tools/hero-matte.py <raw_clips_dir> <work_dir> <out_dir> <path/to/ffmpeg> rvm_resnet50_fp32.onnx
 ```
 
-Then copy each `<out_dir>/<name>-<cut>.mp4` and `.jpg` to `public/video/hero-<name>-<cut>.*`. The pack layout in the script must match `PACK` in `src/lib/heroGL.ts`.
+Then extract each colour intermediate to JPEG frames, run `tools/hero-sam/run_all.sh` (it needs a CUDA PyTorch venv with SAM 2 and the `sam2.1_hiera_large.pt` checkpoint, about 1.4 GB of GPU memory and under 2 minutes per clip), and copy each output `<name>-<cut>.mp4` and `.jpg` to `public/video/hero-<name>-<cut>.*`. The pack layout in the scripts must match `PACK` in `src/lib/heroGL.ts`.
 
 ## Customize for a real gym
 

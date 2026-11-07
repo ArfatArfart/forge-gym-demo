@@ -37,13 +37,49 @@ r = max(2, round(ch / 400))  # ~3 px on both cuts
 k_dil = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1))
 min_area = 0.0015 * cw * ch
 
+# Objects that are a two plate barbell. The bar between the plates is thin and motion blurred, so
+# segmentation can drop pieces of it; a barbell is rigid, so draw it as a line between the plate centres.
+BARBELLS = {"barbell": [2]}
+# Objects that move fast enough to smear (battle ropes).
+BLURRY = {"conditioning": [2, 3]}
+
+
+def complete_bar(prob):
+    m = (prob > 0.5).astype(np.uint8)
+    if m.sum() == 0:
+        return prob
+    dt = cv2.distanceTransform(m, cv2.DIST_L2, 5)
+    rmax = float(dt.max())
+    if rmax < 8:
+        return prob
+    cores = (dt > 0.35 * rmax).astype(np.uint8)
+    n_lab, _, stats, cents = cv2.connectedComponentsWithStats(cores, connectivity=8)
+    if n_lab < 3:
+        return prob
+    big = sorted(range(1, n_lab), key=lambda i: -stats[i, cv2.CC_STAT_AREA])[:2]
+    if stats[big[1], cv2.CC_STAT_AREA] < 0.15 * stats[big[0], cv2.CC_STAT_AREA]:
+        return prob
+    (x0, y0), (x1, y1) = cents[big[0]], cents[big[1]]
+    line = np.zeros_like(prob)
+    t = int(round(0.22 * rmax)) + 4
+    cv2.line(line, (int(round(x0)), int(round(y0))), (int(round(x1)), int(round(y1))), 1.0, t, cv2.LINE_AA)
+    return np.maximum(prob, line)
+
+
 mattes = []
 for f in range(n):
     sam = np.zeros((ch, cw), np.float32)
     for o in objs:
         p = sam_dir / str(o) / f"{f:05d}.png"
         if p.exists():
-            sam = np.maximum(sam, cv2.imread(str(p), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255)
+            prob = cv2.imread(str(p), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
+            if o in BARBELLS.get(name, []):
+                prob = complete_bar(prob)
+            if o in BLURRY.get(name, []):
+                # Motion blur leaves fast ropes half confident: lift partial values so the streak reads solid.
+                prob = np.sqrt(cv2.GaussianBlur(prob, (9, 9), 0))
+                prob[prob < 0.3] = 0
+            sam = np.maximum(sam, prob)
     # Drop specks: SAM sometimes lights up a few stray pixels on shiny background objects.
     binary = (np.maximum(sam, rvm[f]) > 0.5).astype(np.uint8)
     n_lab, labels, stats, _ = cv2.connectedComponentsWithStats(binary, connectivity=8)
