@@ -5,7 +5,7 @@ import { resolve } from 'node:path'
 
 // GitHub Pages serves the site from /<repo-name>/. Override with BASE_PATH if the repo is renamed.
 export default defineConfig(({ command, isPreview }) => ({
-  base: command === 'build' || isPreview ? (process.env.BASE_PATH ?? '/forge-athletic-club/') : '/',
+  base: command === 'build' || isPreview ? (process.env.BASE_PATH ?? '/forge-gym-demo/') : '/',
   plugins: [react(), tailwindcss()],
   build: {
     target: 'es2022',

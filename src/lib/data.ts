@@ -260,6 +260,80 @@ export const FAQS = [
   },
 ]
 
+/** Demo WhatsApp number (fictional 555 line). Replace with the gym's real number. */
+export const WHATSAPP = {
+  number: '15035550148',
+  message: 'Hi Forge, I would like to book a free trial class.',
+}
+export const whatsappLink = (text = WHATSAPP.message) =>
+  `https://wa.me/${WHATSAPP.number}?text=${encodeURIComponent(text)}`
+
+export type ProgramId = 'strength' | 'conditioning' | 'barbell' | 'foundations'
+
+export type Program = {
+  id: ProgramId
+  name: string
+  video: string // base name in /public/video, without -wide/-tall
+  promise: string
+  body: string
+  duration: string
+  level: Level
+  coach: CoachId
+  intensity: number // 1 to 5
+  times: string
+}
+
+export const PROGRAMS: Program[] = [
+  {
+    id: 'strength',
+    name: 'Strength',
+    video: 'strength',
+    promise: 'Squat, press and pull more every block.',
+    body: 'The core of Forge. Heavy compound lifts in planned 12 week blocks, with a coach adjusting your weights on every working set.',
+    duration: '60 min',
+    level: 'All levels',
+    coach: 'marcus',
+    intensity: 4,
+    times: 'Weekdays at 6:00 am, 7:15 am and 6:45 pm',
+  },
+  {
+    id: 'conditioning',
+    name: 'Conditioning',
+    video: 'conditioning',
+    promise: 'Build an engine without losing your strength.',
+    body: 'Short, hard intervals on ropes, sleds, rowers and bikes. Scaled to you, so a first timer and a marathoner share the same floor.',
+    duration: '45 min',
+    level: 'All levels',
+    coach: 'lena',
+    intensity: 5,
+    times: 'Weekdays at 6:00 am and 7:15 am, Saturday 9:15 am',
+  },
+  {
+    id: 'barbell',
+    name: 'Barbell club',
+    video: 'barbell',
+    promise: 'Learn the snatch and the clean and jerk properly.',
+    body: 'Olympic lifting technique with Dana, a former national competitor. Small groups, video feedback and a testing day every block.',
+    duration: '75 min',
+    level: 'Intermediate',
+    coach: 'dana',
+    intensity: 4,
+    times: 'Monday, Tuesday, Wednesday and Thursday evenings, Saturday 10:30 am',
+  },
+  {
+    id: 'foundations',
+    name: 'Foundations',
+    video: 'foundations',
+    promise: 'Never lifted before? Start here.',
+    body: 'Four weeks on the squat, hinge, press and pull with light loads and lots of coaching. You graduate into regular classes with confidence.',
+    duration: '60 min',
+    level: 'Beginner friendly',
+    coach: 'lena',
+    intensity: 2,
+    times: 'Monday and Wednesday at 6:45 pm, Saturday 8:00 am',
+  },
+]
+
 export const HOURS = [
   { day: 'Mon to Fri', open: 5.5, close: 22, label: '5:30 am to 10:00 pm' },
   { day: 'Saturday', open: 7, close: 18, label: '7:00 am to 6:00 pm' },

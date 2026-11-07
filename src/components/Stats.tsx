@@ -5,10 +5,10 @@ import { EASE } from '../lib/motion'
 import { Reveal } from './ui/Reveal'
 
 const STATS = [
-  { value: GYM.members, decimals: 0, label: 'members training with us every week' },
-  { value: GYM.rating, decimals: 1, label: 'average rating across 312 Google reviews' },
-  { value: 10, decimals: 0, label: 'athletes per coach, never more' },
-  { value: CLASSES_PER_WEEK, decimals: 0, label: 'coached classes on the weekly schedule' },
+  { value: GYM.members, decimals: 0, suffix: '', label: 'members training every week' },
+  { value: GYM.rating, decimals: 1, suffix: '★', label: 'from 312 Google reviews' },
+  { value: 10, decimals: 0, suffix: '', label: 'athletes per coach, never more' },
+  { value: CLASSES_PER_WEEK, decimals: 0, suffix: '', label: 'coached classes every week' },
 ]
 
 function Counter({ value, decimals }: { value: number; decimals: number }) {
@@ -40,18 +40,22 @@ function Counter({ value, decimals }: { value: number; decimals: number }) {
 
 export function Stats() {
   return (
-    <section aria-label="Forge in numbers" className="bg-ink py-16 md:py-24">
+    <section aria-label="Forge in numbers" className="bg-ink pb-8 pt-16 md:pb-12 md:pt-24">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-8">
         <Reveal>
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl bg-white/10 lg:grid-cols-4">
-            {STATS.map((s) => (
-              <div key={s.label} className="flex flex-col gap-2 bg-ink p-6 md:p-8">
+          <dl className="grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-4">
+            {STATS.map((s, i) => (
+              <div
+                key={s.label}
+                className={`flex flex-col justify-between gap-6 rounded-3xl p-4 md:min-h-44 md:p-6 ${i === 0 ? 'bg-volt text-ink' : 'bg-coal text-white'}`}
+              >
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="heading-4 md:heading-3 font-mono text-white">
+                <dd className="heading-3 md:heading-2 font-mono">
                   <Counter value={s.value} decimals={s.decimals} />
+                  {s.suffix && <span className="heading-5 ml-1 align-top text-volt">{s.suffix}</span>}
                   <span className="sr-only">{s.value.toFixed(s.decimals)}</span>
                 </dd>
-                <dd className="body-6 text-muted" aria-hidden="true">
+                <dd className={`body-6 ${i === 0 ? 'text-ink/70' : 'text-muted'}`} aria-hidden="true">
                   {s.label}
                 </dd>
               </div>

@@ -1,24 +1,34 @@
-import { Logo } from './ui/Logo'
-import { GYM, HOURS } from '../lib/data'
+import { WhatsappLogo } from '@phosphor-icons/react'
+import { Logo, Wordmark } from './ui/Logo'
+import { GYM, HOURS, whatsappLink } from '../lib/data'
 import { asset } from '../lib/asset'
 
 const link =
-  'body-6 rounded text-muted transition-colors duration-300 ease-forge hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember'
+  'body-6 rounded text-muted transition-colors duration-300 ease-forge hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt'
 
 export function Footer() {
   return (
-    <footer className="bg-ink">
-      <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 py-16 md:grid-cols-2 md:px-8 lg:grid-cols-4">
+    <footer className="overflow-hidden bg-ink pb-28 md:pb-8">
+      <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 pt-16 md:grid-cols-2 md:px-8 md:pt-24 lg:grid-cols-4">
         <div>
           <Logo />
           <p className="body-6 mt-4 max-w-xs text-muted">
             A coached strength and conditioning gym on Portland's east side. Small classes, real programs, measurable
             progress.
           </p>
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button-sm mt-6 inline-flex min-h-10 items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-white transition-colors duration-300 ease-forge hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt"
+          >
+            <WhatsappLogo size={18} weight="fill" className="text-[#25d366]" aria-hidden="true" />
+            Chat on WhatsApp
+          </a>
         </div>
 
         <div>
-          <h2 className="title-4 font-mono uppercase tracking-widest text-dim">Visit</h2>
+          <h2 className="caption-3 font-mono uppercase tracking-widest text-dim">Visit</h2>
           <address className="body-6 mt-4 flex flex-col gap-1 not-italic text-muted">
             <span className="text-white">{GYM.street}</span>
             <span>{GYM.city}</span>
@@ -32,7 +42,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="title-4 font-mono uppercase tracking-widest text-dim">Open gym hours</h2>
+          <h2 className="caption-3 font-mono uppercase tracking-widest text-dim">Open gym hours</h2>
           <dl className="mt-4 flex flex-col gap-2">
             {HOURS.map((h) => (
               <div key={h.day} className="flex justify-between gap-4 md:max-w-64">
@@ -44,7 +54,7 @@ export function Footer() {
         </div>
 
         <nav aria-label="Footer">
-          <h2 className="title-4 font-mono uppercase tracking-widest text-dim">Explore</h2>
+          <h2 className="caption-3 font-mono uppercase tracking-widest text-dim">Explore</h2>
           <ul className="mt-4 grid grid-cols-2 gap-2">
             {[
               ['Programs', '#programs'],
@@ -64,10 +74,14 @@ export function Footer() {
         </nav>
       </div>
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 pb-8 md:flex-row md:items-center md:justify-between md:px-8">
+      <div className="mx-auto mt-16 w-full max-w-7xl px-4 md:px-8" aria-hidden="true">
+        <Wordmark className="block h-auto w-full text-volt" />
+      </div>
+
+      <div className="mx-auto mt-6 flex w-full max-w-7xl flex-col gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8">
         <p className="caption-5 text-dim">
-          © {new Date().getFullYear()} Forge Athletic Club. Demo concept: names, prices and reviews are fictional. Photos
-          from Unsplash.
+          © {new Date().getFullYear()} Forge Athletic Club. Demo concept: names, prices and reviews are fictional. Footage
+          from Mixkit, photos from Unsplash.
         </p>
         <ul className="flex gap-6">
           <li>

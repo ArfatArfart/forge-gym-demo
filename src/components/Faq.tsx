@@ -12,17 +12,17 @@ export function Faq() {
     <section id="faq" aria-labelledby="faq-title" className="scroll-mt-24 bg-ink py-16 md:py-24">
       <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 md:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <Reveal className="lg:sticky lg:top-32 lg:self-start">
-          <p className="caption-3 font-mono uppercase tracking-widest text-ember">FAQ</p>
+          <p className="caption-3 font-mono uppercase tracking-widest text-volt">FAQ</p>
           <h2 id="faq-title" className="heading-4 md:heading-2 mt-4 text-white">
             Questions before your first class
           </h2>
           <p className="body-3 mt-6 text-muted">
             Still unsure? Call the front desk on{' '}
-            <a href="tel:+15035550148" className="text-white underline decoration-white/30 underline-offset-4 transition-colors duration-300 ease-forge hover:decoration-ember">
+            <a href="tel:+15035550148" className="text-white underline decoration-white/30 underline-offset-4 transition-colors duration-300 ease-forge hover:decoration-volt">
               {GYM.phone}
             </a>{' '}
             or email{' '}
-            <a href={`mailto:${GYM.email}`} className="text-white underline decoration-white/30 underline-offset-4 transition-colors duration-300 ease-forge hover:decoration-ember">
+            <a href={`mailto:${GYM.email}`} className="text-white underline decoration-white/30 underline-offset-4 transition-colors duration-300 ease-forge hover:decoration-volt">
               {GYM.email}
             </a>
             .
@@ -42,14 +42,14 @@ export function Faq() {
                       aria-expanded={isOpen}
                       aria-controls={`faq-a-${i}`}
                       onClick={() => setOpen(isOpen ? null : i)}
-                      className="title-2 flex w-full items-center justify-between gap-6 rounded-2xl p-6 text-left text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
+                      className="title-2 flex w-full items-center justify-between gap-6 rounded-2xl p-6 text-left text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt"
                     >
                       {f.q}
                       <Plus
                         size={20}
                         weight="bold"
                         aria-hidden="true"
-                        className={`shrink-0 transition-transform duration-500 ease-forge ${isOpen ? 'rotate-45 text-ember' : 'text-muted'}`}
+                        className={`shrink-0 transition-transform duration-500 ease-forge ${isOpen ? 'rotate-45 text-volt' : 'text-muted'}`}
                       />
                     </button>
                   </h3>

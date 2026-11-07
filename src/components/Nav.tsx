@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { WhatsappLogo } from '@phosphor-icons/react'
 import { Logo } from './ui/Logo'
 import { Button } from './ui/Button'
+import { whatsappLink } from '../lib/data'
 import { EASE } from '../lib/motion'
 import { getLenis } from '../lib/lenis'
 import { useActiveSection } from '../lib/useActiveSection'
@@ -16,7 +18,7 @@ const LINKS = [
 const IDS = LINKS.map((l) => l.id)
 
 const focusRing =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2 focus-visible:ring-offset-ink'
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt focus-visible:ring-offset-2 focus-visible:ring-offset-ink'
 
 export function Nav() {
   const active = useActiveSection(IDS)
@@ -84,7 +86,7 @@ export function Nav() {
             })}
           </ul>
 
-          <Button href="#book" size="sm" className="ml-auto md:ml-2">
+          <Button href="#book" size="sm" className="ml-auto hidden md:ml-2 md:inline-flex">
             Book free trial
           </Button>
 
@@ -139,7 +141,7 @@ export function Nav() {
                       }`}
                     >
                       {l.label}
-                      {active === l.id && <span className="size-2 rounded-full bg-ember" aria-hidden="true" />}
+                      {active === l.id && <span className="size-2 rounded-full bg-volt" aria-hidden="true" />}
                     </a>
                   </motion.li>
                 ))}
@@ -153,6 +155,15 @@ export function Nav() {
                 <Button href="#book" arrow onClick={() => setOpen(false)} className="w-full">
                   Book your free trial class
                 </Button>
+                <a
+                  href={whatsappLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button-md flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/10 px-3 py-2 text-white transition-colors duration-300 ease-forge hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt"
+                >
+                  <WhatsappLogo size={20} weight="fill" className="text-[#25d366]" aria-hidden="true" />
+                  Message us on WhatsApp
+                </a>
                 <p className="caption-2 text-center text-muted">418 Foundry Street, Portland</p>
               </motion.div>
             </nav>

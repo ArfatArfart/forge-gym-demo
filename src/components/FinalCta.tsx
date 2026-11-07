@@ -1,11 +1,11 @@
 import { useEffect, useId, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { ArrowRight, CaretDown, CheckCircle, Clock, CreditCard, Clipboard, WarningCircle } from '@phosphor-icons/react'
+import { ArrowRight, ArrowUpRight, CaretDown, CheckCircle, Clock, CreditCard, Clipboard, WarningCircle, WhatsappLogo } from '@phosphor-icons/react'
 import { EASE } from '../lib/motion'
-import { asset } from '../lib/asset'
-import { DAYS, SCHEDULE, classKey, classLabel, coachName } from '../lib/data'
+import { DAYS, SCHEDULE, classKey, classLabel, coachName, whatsappLink } from '../lib/data'
 import { PREFILL_EVENT } from './Schedule'
 import { Reveal } from './ui/Reveal'
+import { LoopVideo } from './ui/LoopVideo'
 import { buttonClass } from './ui/Button'
 
 const EXPERIENCE = ['New to lifting', 'Some experience', 'Lift regularly'] as const
@@ -31,7 +31,7 @@ function validate(f: Fields): Errors {
 
 const inputBase =
   'body-3 w-full rounded-xl border bg-ink px-4 py-3 text-white placeholder:text-dim transition-colors duration-300 ease-forge ' +
-  'focus:outline-none focus-visible:ring-2 focus-visible:ring-ember disabled:opacity-50'
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-volt disabled:opacity-50'
 
 function FieldError({ id, msg }: { id: string; msg?: string }) {
   return (
@@ -43,7 +43,7 @@ function FieldError({ id, msg }: { id: string; msg?: string }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: EASE }}
-          className="caption-2 mt-2 flex items-center gap-1 text-ember"
+          className="caption-2 mt-2 flex items-center gap-1 text-danger"
           role="alert"
         >
           <WarningCircle size={14} weight="bold" aria-hidden="true" />
@@ -57,25 +57,19 @@ function FieldError({ id, msg }: { id: string; msg?: string }) {
 export function FinalCta() {
   return (
     <section id="book" aria-labelledby="book-title" className="relative scroll-mt-24 overflow-hidden bg-ink py-16 md:py-24">
-      <img
-        src={asset('images/final.webp')}
-        alt=""
-        loading="lazy"
-        className="absolute inset-0 size-full object-cover opacity-60 grayscale"
-        aria-hidden="true"
-      />
+      <LoopVideo name="barbell" className="absolute inset-0 size-full object-cover" />
       <span className="absolute inset-0 bg-ink/75" aria-hidden="true" />
 
       <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-4 md:px-8 lg:grid-cols-2 lg:items-center lg:gap-16">
         <Reveal>
-          <p className="caption-3 font-mono uppercase tracking-widest text-ember">Free trial class</p>
+          <p className="caption-3 font-mono uppercase tracking-widest text-volt">Free trial class</p>
           <h2 id="book-title" className="heading-3 md:heading-1 mt-4 max-w-[680px]">
             <span className="text-hero">
               Your first class <br />
               is on us
             </span>
           </h2>
-          <p className="body-3 md:body-7 mt-6 max-w-md text-muted">
+          <p className="body-3 md:body-7 mt-6 max-w-md text-white/80">
             Book a class, meet your coach and lift with the group. If it is not for you, you have lost nothing but an
             hour.
           </p>
@@ -86,13 +80,28 @@ export function FinalCta() {
               { icon: Clipboard, text: 'Free 30 minute movement assessment' },
             ].map(({ icon: I, text }) => (
               <li key={text} className="flex items-center gap-3">
-                <span className="flex size-8 items-center justify-center rounded-lg bg-white/5 text-ember">
+                <span className="flex size-8 items-center justify-center rounded-lg bg-volt text-ink">
                   <I size={16} weight="bold" aria-hidden="true" />
                 </span>
                 <span className="body-2 text-white">{text}</span>
               </li>
             ))}
           </ul>
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-8 flex items-center gap-4 rounded-3xl border border-white/15 bg-ink/50 p-4 backdrop-blur-md transition-colors duration-300 ease-forge hover:bg-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt sm:max-w-md"
+          >
+            <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#25d366] text-white">
+              <WhatsappLogo size={26} weight="fill" aria-hidden="true" />
+            </span>
+            <span className="flex-1">
+              <span className="title-3 block text-white">Prefer WhatsApp?</span>
+              <span className="caption-2 text-muted">Message the front desk. We reply within the hour, 6 am to 9 pm.</span>
+            </span>
+            <ArrowUpRight size={18} weight="bold" aria-hidden="true" className="text-white transition-transform duration-300 ease-forge group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
         </Reveal>
 
         <Reveal delay={0.1}>
@@ -167,7 +176,7 @@ function BookingForm() {
             className="flex flex-col items-start py-8"
             role="status"
           >
-            <span className="flex size-12 items-center justify-center rounded-2xl bg-ember text-ink">
+            <span className="flex size-12 items-center justify-center rounded-2xl bg-volt text-ink">
               <CheckCircle size={24} weight="bold" aria-hidden="true" />
             </span>
             <h3 className="heading-5 mt-6 text-white">Trial booked for {firstName}</h3>
@@ -222,7 +231,7 @@ function BookingForm() {
                     aria-invalid={!!errors.name && touched.name}
                     aria-describedby={errors.name && touched.name ? id('name-err') : undefined}
                     placeholder="Jordan Ellis"
-                    className={`${inputBase} mt-2 ${errors.name && touched.name ? 'border-ember' : 'border-white/10 hover:border-white/20'}`}
+                    className={`${inputBase} mt-2 ${errors.name && touched.name ? 'border-danger' : 'border-white/10 hover:border-white/20'}`}
                   />
                   <FieldError id={id('name-err')} msg={touched.name ? errors.name : undefined} />
                 </div>
@@ -241,7 +250,7 @@ function BookingForm() {
                     aria-invalid={!!errors.email && touched.email}
                     aria-describedby={errors.email && touched.email ? id('email-err') : undefined}
                     placeholder="jordan@example.com"
-                    className={`${inputBase} mt-2 ${errors.email && touched.email ? 'border-ember' : 'border-white/10 hover:border-white/20'}`}
+                    className={`${inputBase} mt-2 ${errors.email && touched.email ? 'border-danger' : 'border-white/10 hover:border-white/20'}`}
                   />
                   <FieldError id={id('email-err')} msg={touched.email ? errors.email : undefined} />
                 </div>
@@ -263,7 +272,7 @@ function BookingForm() {
                     aria-invalid={!!errors.phone && touched.phone}
                     aria-describedby={errors.phone && touched.phone ? id('phone-err') : undefined}
                     placeholder="(503) 555 0199"
-                    className={`${inputBase} mt-2 ${errors.phone && touched.phone ? 'border-ember' : 'border-white/10 hover:border-white/20'}`}
+                    className={`${inputBase} mt-2 ${errors.phone && touched.phone ? 'border-danger' : 'border-white/10 hover:border-white/20'}`}
                   />
                   <FieldError id={id('phone-err')} msg={touched.phone ? errors.phone : undefined} />
                 </div>
@@ -277,7 +286,7 @@ function BookingForm() {
                     id={id('slot')}
                     value={fields.slot}
                     onChange={(e) => set('slot', e.target.value)}
-                    className={`${inputBase} appearance-none pr-12 ${highlight ? 'border-ember' : 'border-white/10 hover:border-white/20'}`}
+                    className={`${inputBase} appearance-none pr-12 ${highlight ? 'border-volt' : 'border-white/10 hover:border-white/20'}`}
                   >
                     <option value="">Any class, call me</option>
                     {DAYS.map((d) => {
@@ -308,8 +317,8 @@ function BookingForm() {
                     return (
                       <label
                         key={x}
-                        className={`caption-1 flex cursor-pointer items-center justify-center rounded-xl border px-3 py-3 text-center transition-colors duration-300 ease-forge has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ember ${
-                          checked ? 'border-ember bg-ember/10 text-white' : 'border-white/10 bg-ink text-muted hover:border-white/20 hover:text-white'
+                        className={`caption-1 flex cursor-pointer items-center justify-center rounded-xl border px-3 py-3 text-center transition-colors duration-300 ease-forge has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-volt ${
+                          checked ? 'border-volt bg-volt/10 text-white' : 'border-white/10 bg-ink text-muted hover:border-white/20 hover:text-white'
                         }`}
                       >
                         <input

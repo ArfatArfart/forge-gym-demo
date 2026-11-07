@@ -1,7 +1,7 @@
 import { Fragment, useRef, useState } from 'react'
 import { useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
 
-const LINES = ['Strength is not luck.', 'It is a written plan,', 'a coach on every rep,', 'and a number that goes up.']
+const LINES = ['No shortcuts.', 'A written plan,', 'a coach every rep,', 'and numbers', 'that go up.']
 const WORDS = LINES.map((l) => l.split(' '))
 const TOTAL = WORDS.flat().length
 
@@ -22,12 +22,12 @@ export function TaglineReveal() {
   let index = 0
 
   return (
-    <section aria-label="Our approach" className="bg-forge">
+    <section aria-label="Our approach" className="bg-volt text-ink">
       <div ref={ref} className={reduced ? '' : 'relative h-[240vh]'}>
         <div className={reduced ? 'py-24' : 'sticky top-0 flex h-[100svh] items-center'}>
           <div className="mx-auto w-full max-w-7xl px-4 md:px-8">
-            <p className="caption-3 font-mono uppercase tracking-widest text-ember">Our approach</p>
-            <p className="heading-4 sm:heading-3 lg:heading-2 mt-6 max-w-[680px] text-white">
+            <p className="caption-3 font-mono uppercase tracking-widest">The Forge method</p>
+            <p className="heading-4 sm:heading-2 lg:heading-1 mt-6 max-w-[680px]">
               <span className="sr-only">{LINES.join(' ')}</span>
               {WORDS.map((line, li) => (
                 <span key={li} className="block" aria-hidden="true">
@@ -37,7 +37,7 @@ export function TaglineReveal() {
                       <Fragment key={wi}>
                         <span
                           className="inline-block transition-opacity duration-500 ease-forge"
-                          style={{ opacity: i < count ? 1 : 0.28 }}
+                          style={{ opacity: i < count ? 1 : 0.22 }}
                         >
                           {word}
                         </span>
@@ -48,7 +48,7 @@ export function TaglineReveal() {
                 </span>
               ))}
             </p>
-            <p className="caption-2 mt-12 font-mono text-dim">Forge Athletic Club · Coaching strength in Portland since 2019</p>
+            <p className="caption-2 mt-12 font-mono">Coaching strength in Portland since 2019</p>
           </div>
         </div>
       </div>

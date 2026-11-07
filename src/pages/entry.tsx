@@ -15,13 +15,13 @@ function Shell({ children }: { children: ReactNode }) {
     <div className="flex min-h-[100svh] flex-col bg-ink">
       <a
         href="#main"
-        className="button-sm fixed left-4 top-4 z-[60] -translate-y-24 rounded-full bg-ember px-3 py-2 text-ink transition-transform duration-300 ease-forge focus:translate-y-0"
+        className="button-sm fixed left-4 top-4 z-[60] -translate-y-24 rounded-full bg-volt px-3 py-2 text-ink transition-transform duration-300 ease-forge focus:translate-y-0"
       >
         Skip to content
       </a>
       <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
         <nav aria-label="Main" className="flex w-full max-w-md items-center justify-between gap-2 rounded-full border border-white/10 bg-coal/70 p-2 backdrop-blur-xl">
-          <a href={home} className="rounded-full px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember" aria-label="Forge Athletic Club home">
+          <a href={home} className="rounded-full px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt" aria-label="Forge Athletic Club home">
             <Logo compact />
           </a>
           <a href={home} className={buttonClass('secondary', 'sm')}>
@@ -43,7 +43,7 @@ function Shell({ children }: { children: ReactNode }) {
 function Legal({ title, updated, sections }: { title: string; updated: string; sections: { h: string; p: string }[] }) {
   return (
     <article className="mx-auto w-full max-w-3xl px-4 pb-24 pt-32 md:px-8">
-      <p className="caption-3 font-mono uppercase tracking-widest text-ember">Legal</p>
+      <p className="caption-3 font-mono uppercase tracking-widest text-volt">Legal</p>
       <h1 className="heading-3 md:heading-2 mt-4">
         <span className="text-hero">{title}</span>
       </h1>
